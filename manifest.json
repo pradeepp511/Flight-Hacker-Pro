@@ -1,0 +1,92 @@
+{
+  "manifest_version": 3,
+  "name": "Flight Hacker Pro",
+  "version": "2.0",
+  "minimum_chrome_version": "116",
+  "description": "True price baggage calculators, POS arbitrage, flexible 90-day matrix scanning, time/cost tradeoffs, comfort analytics, lounge/visa assist, and self-transfer segregations for Google Flights.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "notifications",
+    "alarms"
+  ],
+  "host_permissions": [
+    "*://*.google.com/*",
+    "*://*.google.co.uk/*",
+    "*://*.google.de/*",
+    "*://*.google.co.in/*",
+    "*://*.google.ca/*",
+    "*://*.google.fr/*",
+    "*://*.google.com.au/*",
+    "*://*.google.es/*",
+    "*://*.google.it/*",
+    "*://*.google.co.jp/*",
+    "*://*.google.com.br/*",
+    "*://*.google.nl/*",
+    "*://*.google.ch/*",
+    "*://*.google.com.sg/*",
+    "*://*.google.ae/*",
+    "*://*.google.com.mx/*",
+    "*://*.google.co.nz/*",
+    "https://open.er-api.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.google.com/travel/flights*",
+        "*://*.google.com/flights*",
+        "*://*.google.co.uk/travel/flights*",
+        "*://*.google.co.uk/flights*",
+        "*://*.google.de/travel/flights*",
+        "*://*.google.de/flights*",
+        "*://*.google.co.in/travel/flights*",
+        "*://*.google.co.in/flights*",
+        "*://*.google.ca/travel/flights*",
+        "*://*.google.ca/flights*",
+        "*://*.google.fr/travel/flights*",
+        "*://*.google.fr/flights*",
+        "*://*.google.com.au/travel/flights*",
+        "*://*.google.com.au/flights*",
+        "*://*.google.es/travel/flights*",
+        "*://*.google.es/flights*",
+        "*://*.google.it/travel/flights*",
+        "*://*.google.it/flights*",
+        "*://*.google.co.jp/travel/flights*",
+        "*://*.google.co.jp/flights*",
+        "*://*.google.com.br/travel/flights*",
+        "*://*.google.com.br/flights*",
+        "*://*.google.nl/travel/flights*",
+        "*://*.google.nl/flights*",
+        "*://*.google.ch/travel/flights*",
+        "*://*.google.ch/flights*",
+        "*://*.google.com.sg/travel/flights*",
+        "*://*.google.com.sg/flights*",
+        "*://*.google.ae/travel/flights*",
+        "*://*.google.ae/flights*",
+        "*://*.google.com.mx/travel/flights*",
+        "*://*.google.com.mx/flights*",
+        "*://*.google.co.nz/travel/flights*",
+        "*://*.google.co.nz/flights*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
