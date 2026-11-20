@@ -984,6 +984,78 @@ runTest("OP4.4: 3-Leg Multi-City search preserves all intermediate legs", () => 
 });
 
 // -------------------------------------------------------------
+// Test Group 10: Hub-Hunting & Functional Links (Finding OP5)
+// -------------------------------------------------------------
+const megaHubMap = {
+    'IND': 'ORD', 'CMH': 'ORD', 'CVG': 'ORD', 'MDW': 'ORD',
+    'COK': 'DEL', 'TRV': 'DEL', 'BLR': 'DEL', 'HYD': 'BOM', 'CCU': 'DEL',
+    'MAN': 'LHR', 'BHX': 'LHR', 'EDI': 'LHR'
+};
+
+function assessHubHuntingOpportunity(origin, destination, fareInUSD, userCurr = 'INR') {
+    if (!origin || !fareInUSD || fareInUSD < 350) return null;
+    const hub = megaHubMap[origin.toUpperCase()];
+    if (!hub || hub === (destination || '').toUpperCase()) return null;
+
+    const positioningLegUSD = 80;
+    const hubLongHaulUSD = fareInUSD * 0.55;
+    const totalHackerFareUSD = positioningLegUSD + hubLongHaulUSD;
+    const savingsUSD = fareInUSD - totalHackerFareUSD;
+
+    if (savingsUSD > 180) {
+        const userRate = 83.5;
+        const savingsBase = Math.round(savingsUSD * userRate);
+        const hackerFareBase = Math.round(totalHackerFareUSD * userRate);
+        const savingsPct = ((savingsUSD / fareInUSD) * 100).toFixed(1);
+        return {
+            hub,
+            origin: origin.toUpperCase(),
+            destination: (destination || '').toUpperCase(),
+            savingsUSD,
+            savingsBase,
+            hackerFareBase,
+            savingsPct
+        };
+    }
+    return null;
+}
+
+runTest("OP5.1: Hub-Hunting positioning detects feeder route and calculates savings", () => {
+    const opp = assessHubHuntingOpportunity('IND', 'CDG', 950, 'USD');
+    assert.notStrictEqual(opp, null);
+    assert.strictEqual(opp.hub, 'ORD');
+    assert.strictEqual(Number(opp.savingsUSD) > 300, true);
+    assert.strictEqual(opp.savingsPct, '36.6');
+
+    // Unknown hub returns null
+    const noHub = assessHubHuntingOpportunity('JFK', 'CDG', 950, 'USD');
+    assert.strictEqual(noHub, null);
+
+    // Cheap domestic flight returns null
+    const cheap = assessHubHuntingOpportunity('IND', 'ORD', 120, 'USD');
+    assert.strictEqual(cheap, null);
+});
+
+runTest("OP5.2: OTA Cross-Check URLs generate robust deep links and safe fallbacks", () => {
+    const makeOtaUrls = (origin, dest, depIso, retIso) => {
+        const depCompact = depIso ? depIso.replace(/-/g, '').slice(2) : '';
+        const retCompact = retIso ? retIso.replace(/-/g, '').slice(2) : '';
+        return {
+            skyscanner: (origin && dest) ? `https://www.skyscanner.com/transport/flights/${origin.toLowerCase()}/${dest.toLowerCase()}${depCompact ? '/' + depCompact : ''}${retCompact ? '/' + retCompact : ''}` : 'https://www.skyscanner.com',
+            kayak: (origin && dest) ? `https://www.kayak.com/flights/${origin}-${dest}${depIso ? '/' + depIso : ''}${retIso ? '/' + retIso : ''}` : 'https://www.kayak.com/flights'
+        };
+    };
+
+    const deep = makeOtaUrls('DEL', 'LHR', '2026-11-20', '2026-12-05');
+    assert.strictEqual(deep.skyscanner, 'https://www.skyscanner.com/transport/flights/del/lhr/261120/261205');
+    assert.strictEqual(deep.kayak, 'https://www.kayak.com/flights/DEL-LHR/2026-11-20/2026-12-05');
+
+    const fallback = makeOtaUrls('', '', '', '');
+    assert.strictEqual(fallback.skyscanner, 'https://www.skyscanner.com');
+    assert.strictEqual(fallback.kayak, 'https://www.kayak.com/flights');
+});
+
+// -------------------------------------------------------------
 // Test Summary
 // -------------------------------------------------------------
 console.log(`\nResults: ${passed}/${passed + failed} tests passed.`);

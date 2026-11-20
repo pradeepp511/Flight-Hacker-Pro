@@ -1,11 +1,17 @@
-/* Extension Injection Styles */
+/* Flight Hacker Pro - Enterprise Corporate Design System
+   Palette: Slate-900 / Slate-800 / Slate-50, Sapphire Blue (#2563eb), Emerald (#059669)
+   Typography: System / Inter / Segoe UI
+   Borders: 1px solid #e2e8f0, crisp 4px-8px radii
+*/
 
+/* Card Injection Container */
 .fhp-container {
-    padding: 8px 14px;
+    padding: 8px 12px;
     margin: 8px 0;
-    border-top: 1px dashed #d2e3fc;
-    background-color: #f0f4fe;
-    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #0f172a;
+    background-color: #f8fafc;
+    border-radius: 6px;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -13,6 +19,8 @@
     position: relative;
     box-sizing: border-box;
     width: 100%;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .fhp-row {
@@ -22,158 +30,233 @@
     align-items: center;
 }
 
+/* Base Badge */
 .fhp-badge {
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 11.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
     font-weight: 600;
-    font-family: 'Google Sans', Roboto, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     border: 1px solid transparent;
     cursor: help;
-    line-height: 1.3;
+    line-height: 1.35;
     white-space: nowrap;
     box-sizing: border-box;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: 0.01em;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-/* Status Colors */
-.fhp-success { background-color: #e6f4ea; color: #137333; border-color: #ceead6; }
-.fhp-info { background-color: #e8f0fe; color: #1a73e8; border-color: #d2e3fc; }
-.fhp-warn { background-color: #fef7e0; color: #b06000; border-color: #feefc3; }
-.fhp-danger { background-color: #fce8e6; color: #c5221f; border-color: #fad2cf; }
+/* Status & Valuation Palettes */
+.fhp-success {
+    background-color: #f0fdf4;
+    color: #166534;
+    border-color: #bbf7d0;
+}
 
-/* Stopover, Transit Hotel, & Multi-City Badge Styles */
+.fhp-info {
+    background-color: #eff6ff;
+    color: #1e40af;
+    border-color: #bfdbfe;
+}
+
+.fhp-warn {
+    background-color: #fffbeb;
+    color: #92400e;
+    border-color: #fde68a;
+}
+
+.fhp-danger {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+/* Routing & Transit Feature Badges */
 .fhp-stopover-badge {
-    background-color: #f3e8fd;
-    color: #7b1fa2;
-    border-color: #e1bee7;
-    font-weight: 700;
-}
-.fhp-hotel-badge {
-    background-color: #e8f0fe;
-    color: #1a73e8;
-    border-color: #d2e3fc;
+    background-color: #faf5ff;
+    color: #6b21a8;
+    border-color: #e9d5ff;
     font-weight: 600;
-}
-.fhp-tour-badge {
-    background-color: #e6f4ea;
-    color: #137333;
-    border-color: #ceead6;
-    font-weight: 600;
-}
-.fhp-multicity-badge {
-    background-color: #fef7e0;
-    color: #b06000;
-    border-color: #feefc3;
-    font-weight: 700;
 }
 
-/* Split Ticket Hack Styles */
+.fhp-hotel-badge {
+    background-color: #f0f9ff;
+    color: #0369a1;
+    border-color: #bae6fd;
+    font-weight: 600;
+}
+
+.fhp-tour-badge {
+    background-color: #f0fdf4;
+    color: #15803d;
+    border-color: #bbf7d0;
+    font-weight: 600;
+}
+
+.fhp-multicity-badge {
+    background-color: #fff7ed;
+    color: #c2410c;
+    border-color: #fed7aa;
+    font-weight: 600;
+}
+
+/* Hub Hunting & Split Routing */
+.fhp-hub-badge {
+    background-color: #f8fafc;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    font-weight: 600;
+}
+
 .fhp-split-badge {
-    background-color: #e6f4ea;
-    color: #137333;
-    border: 1px solid #34a853;
-    font-weight: 700;
-    box-shadow: 0 1px 3px rgba(52,168,83,0.2);
+    background-color: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(4, 120, 87, 0.08);
 }
 
 .fhp-split-banner {
-    background: linear-gradient(135deg, #137333, #0f5224);
-    color: #ffffff;
-    padding: 12px 18px;
-    margin: 10px 0;
-    border-radius: 8px;
+    background: #0f172a;
+    border-left: 4px solid #10b981;
+    border: 1px solid #1e293b;
+    color: #f8fafc;
+    padding: 10px 16px;
+    margin: 8px 0;
+    border-radius: 6px;
     font-weight: 600;
-    font-size: 13px;
-    box-shadow: 0 4px 10px rgba(19,115,51,0.25);
+    font-size: 12.5px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Clickable Badge */
+/* Clickable Badge States */
 .fhp-clickable-badge {
     cursor: pointer !important;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
 }
 .fhp-clickable-badge:hover {
     transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(26,115,232,0.25);
+    box-shadow: 0 2px 5px rgba(15, 23, 42, 0.1);
+    border-color: #94a3b8;
 }
 
-/* Material Design 3 Itemized Price Modal */
+/* OTA Action Buttons */
+.fhp-ota-btn {
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #334155;
+    font-weight: 600;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.fhp-ota-btn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #94a3b8;
+    transform: translateY(-1px);
+}
+
+/* Enterprise Modal Overlay & Core Content */
 .fhp-modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(6px);
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 99999;
-    animation: fhpFadeIn 0.2s ease-out;
+    animation: fhpFadeIn 0.18s ease-out;
 }
 
 .fhp-modal-content {
     background: #ffffff;
-    width: 360px;
-    max-width: 90vw;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    width: 380px;
+    max-width: 92vw;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.25), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
     padding: 20px;
-    font-family: 'Google Sans', Roboto, Arial, sans-serif;
-    color: #1f1f1f;
-    animation: fhpSlideUp 0.25s ease-out;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #0f172a;
+    animation: fhpSlideUp 0.2s ease-out;
+    box-sizing: border-box;
 }
 
 .fhp-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #e0e3e7;
-    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 12px;
     margin-bottom: 14px;
 }
 
 .fhp-modal-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
-    color: #1a73e8;
+    color: #0f172a;
     margin: 0;
+    letter-spacing: -0.01em;
 }
 
-.fhp-modal-close {
-    background: none;
+.fhp-modal-close,
+.fhp-matrix-close {
+    background: transparent;
     border: none;
-    font-size: 20px;
-    color: #747775;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #64748b;
     cursor: pointer;
     line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.fhp-modal-close:hover,
+.fhp-matrix-close:hover {
+    background: #f1f5f9;
+    color: #0f172a;
 }
 
 .fhp-modal-row {
     display: flex;
     justify-content: space-between;
-    padding: 6px 0;
-    font-size: 13px;
+    align-items: center;
+    padding: 7px 0;
+    font-size: 12.5px;
+    border-bottom: 1px solid #f8fafc;
 }
 
 .fhp-modal-subtext {
     font-size: 11px;
-    color: #5f6368;
+    color: #64748b;
 }
 
 .fhp-modal-total {
     display: flex;
     justify-content: space-between;
-    border-top: 2px solid #1a73e8;
-    padding-top: 10px;
+    align-items: center;
+    border-top: 2px solid #0f172a;
+    padding-top: 12px;
     margin-top: 12px;
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 700;
-    color: #137333;
+    color: #0f172a;
 }
 
 @keyframes fhpFadeIn {
@@ -182,7 +265,7 @@
 }
 
 @keyframes fhpSlideUp {
-    from { opacity: 0; transform: translateY(12px); }
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -191,284 +274,599 @@
     display: none !important;
 }
 
-/* 2D Heat-Map Matrix Modal Styles */
+/* ==========================================================================
+   2D Heat-Map Matrix Modal - Enterprise Layout & Alignment System
+   ========================================================================== */
 .fhp-matrix-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(6px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 999999;
-    animation: fhpFadeIn 0.2s ease-out;
+    animation: fhpFadeIn 0.18s ease-out;
 }
 
 .fhp-matrix-content {
     background: #ffffff;
-    width: 920px;
+    width: 1040px;
     max-width: 96vw;
-    max-height: 88vh;
-    border-radius: 16px;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
-    padding: 22px;
-    font-family: 'Google Sans', Roboto, Arial, sans-serif;
-    color: #1f1f1f;
+    max-height: 90vh;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
+    padding: 22px 24px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #0f172a;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: fhpSlideUp 0.25s ease-out;
+    animation: fhpSlideUp 0.2s ease-out;
+    box-sizing: border-box;
 }
 
 .fhp-matrix-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #e0e3e7;
-    padding-bottom: 12px;
+    align-items: flex-start;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 14px;
     margin-bottom: 14px;
+    gap: 16px;
+}
+
+.fhp-matrix-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
 }
 
 .fhp-matrix-title {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
-    color: #1a73e8;
+    color: #0f172a;
     margin: 0;
     display: flex;
     align-items: center;
     gap: 8px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.fhp-matrix-subtitle {
+    font-size: 11.5px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.fhp-matrix-filter-tags {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #64748b;
+}
+
+.fhp-matrix-tag {
+    background: #f1f5f9;
+    color: #334155;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+    border: 1px solid #e2e8f0;
+    font-size: 11px;
+    white-space: nowrap;
 }
 
 .fhp-matrix-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
-.fhp-matrix-export-btn,
 .fhp-matrix-btn {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    padding: 6px 14px;
-    border-radius: 16px;
-    font-size: 12px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-size: 11.5px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-}
-.fhp-matrix-export-btn:hover,
-.fhp-matrix-btn:hover {
-    background: rgba(255, 255, 255, 0.35);
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: translateY(-1px);
+    font-family: inherit;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    white-space: nowrap;
 }
 
+.fhp-matrix-btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #1d4ed8;
+}
+.fhp-matrix-btn-primary:hover {
+    background: #1d4ed8;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
+}
+
+.fhp-matrix-btn-secondary {
+    background: #f8fafc;
+    color: #334155;
+    border-color: #cbd5e1;
+}
+.fhp-matrix-btn-secondary:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #94a3b8;
+}
+
+.fhp-matrix-btn-outline {
+    background: #ffffff;
+    color: #64748b;
+    border-color: #cbd5e1;
+}
+.fhp-matrix-btn-outline:hover {
+    background: #f8fafc;
+    color: #0f172a;
+    border-color: #94a3b8;
+}
+
+.fhp-matrix-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    font-size: 20px;
+    color: #64748b;
+    cursor: pointer;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+.fhp-matrix-close:hover {
+    background: #fee2e2;
+    color: #dc2626;
+    border-color: #fca5a5;
+}
+
+/* Control Toolbar (Clean Grid - Zero Overflow) */
+.fhp-matrix-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+.fhp-ctrl-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1 1 140px;
+    min-width: 130px;
+}
+
+.fhp-ctrl-item label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fhp-ctrl-item select {
+    height: 32px;
+    padding: 0 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background-color: #ffffff;
+    color: #0f172a;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: inherit;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+.fhp-ctrl-item select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.fhp-range-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    box-sizing: border-box;
+}
+
+.fhp-range-slider {
+    flex: 1;
+    accent-color: #2563eb;
+    cursor: pointer;
+    height: 4px;
+}
+
+.fhp-matrix-status-pill {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    box-sizing: border-box;
+    align-self: flex-end;
+}
+
+/* Optimal Deal Executive Banner */
+.fhp-smart-deal-banner {
+    background: #0f172a;
+    border-left: 4px solid #10b981;
+    border: 1px solid #1e293b;
+    color: #f8fafc;
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.08);
+    box-sizing: border-box;
+}
+
+.fhp-deal-badges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.fhp-deal-pill {
+    background: #10b981;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.fhp-deal-subpill {
+    background: rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.fhp-deal-dates {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #f8fafc;
+    margin-bottom: 3px;
+    line-height: 1.35;
+}
+
+.fhp-deal-pricing {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.4;
+}
+.fhp-deal-pricing strong {
+    color: #f8fafc;
+    font-weight: 700;
+}
+
+.fhp-select-deal-btn {
+    background: #2563eb;
+    color: #ffffff;
+    border: 1px solid #1d4ed8;
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+.fhp-select-deal-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
+}
+
+/* Matrix Table & Sticky Headers */
 .fhp-matrix-scroll-body {
     overflow-y: auto;
     overflow-x: auto;
-    max-height: 60vh;
+    max-height: 55vh;
     flex: 1;
-    border: 1px solid #e0e3e7;
-    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #ffffff;
 }
 
 .fhp-matrix-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    font-size: 11px;
+    font-size: 11.5px;
     text-align: center;
+    font-variant-numeric: tabular-nums;
 }
 
 .fhp-matrix-table th {
-    background: #f1f3f4;
-    color: #444746;
-    padding: 8px 6px;
-    font-weight: 700;
+    background: #f8fafc;
+    color: #475569;
+    padding: 8px 10px;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     position: sticky;
     top: 0;
     z-index: 10;
-    border-bottom: 2px solid #dadce0;
-    border-right: 1px solid #dadce0;
+    border-bottom: 1px solid #cbd5e1;
+    border-right: 1px solid #e2e8f0;
+    white-space: nowrap;
+    min-width: 72px;
 }
 
 .fhp-matrix-table th:first-child {
     z-index: 15;
     left: 0;
+    background: #f1f5f9;
 }
 
 .fhp-matrix-table td:first-child {
     position: sticky;
     left: 0;
     z-index: 5;
-    background: #f8f9fa;
-    font-weight: 700;
-    border-right: 2px solid #dadce0;
+    background: #f8fafc;
+    font-weight: 600;
+    color: #0f172a;
+    border-right: 2px solid #cbd5e1;
+    padding: 8px 12px;
+    white-space: nowrap;
+    text-align: left;
 }
 
 .fhp-matrix-cell {
-    padding: 8px 6px;
-    border: 1px solid #e0e3e7;
+    padding: 7px 6px;
+    border: 1px solid #e2e8f0;
     cursor: pointer;
-    font-weight: 600;
-    transition: transform 0.1s, box-shadow 0.1s;
+    background: #ffffff;
+    transition: all 0.12s ease;
 }
 .fhp-matrix-cell:hover {
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
     z-index: 3;
+    border-color: #94a3b8;
 }
 
 .fhp-matrix-cell-green {
-    background-color: #e6f4ea;
-    color: #137333;
-    border-color: #ceead6;
+    background-color: #f0fdf4;
+    color: #166534;
+    border-color: #dcfce7;
 }
 
 .fhp-matrix-cell-yellow {
-    background-color: #fef7e0;
-    color: #b06000;
-    border-color: #feefc3;
+    background-color: #ffffff;
+    color: #334155;
+    border-color: #e2e8f0;
 }
 
 .fhp-matrix-cell-red {
-    background-color: #fce8e6;
-    color: #c5221f;
-    border-color: #fad2cf;
+    background-color: #fff7ed;
+    color: #9a3412;
+    border-color: #fed7aa;
 }
 
 .fhp-matrix-cell-best {
-    background: linear-gradient(135deg, #e6f4ea, #d2e3fc);
-    color: #137333;
-    border: 2px solid #f9ab00 !important;
+    background: #ecfdf5;
+    color: #065f46;
+    border: 2px solid #059669 !important;
     font-weight: 700;
-    box-shadow: 0 0 10px rgba(249, 171, 0, 0.4);
+    box-shadow: 0 0 8px rgba(5, 150, 105, 0.25);
 }
 
-.fhp-smart-deal-banner {
-    background: linear-gradient(135deg, #137333, #1a73e8);
-    color: #ffffff;
-    padding: 12px 18px;
-    border-radius: 12px;
-    margin-bottom: 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 12px rgba(19, 115, 51, 0.3);
-}
-
-.fhp-select-deal-btn {
-    background: #ffffff;
-    color: #137333;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
+.fhp-cell-price {
+    font-size: 12.5px;
     font-weight: 700;
-    font-size: 12px;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    transition: transform 0.1s, background 0.2s;
-}
-.fhp-select-deal-btn:hover {
-    background: #f8f9fa;
-    transform: scale(1.03);
+    font-variant-numeric: tabular-nums;
+    color: inherit;
 }
 
-/* Google Flights Dark Mode & Modern Theme Support */
+.fhp-cell-tag {
+    font-size: 9px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-left: 3px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.fhp-tag-est {
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+.fhp-tag-live {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    font-weight: 700;
+}
+.fhp-tag-cached {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+/* ==========================================================================
+   Google Flights Dark Mode Support (Enterprise Slate System)
+   ========================================================================== */
 @media (prefers-color-scheme: dark) {
     html:not([dark="false"]) .fhp-container {
-        background-color: #202124;
-        border-top-color: #3c4043;
+        background-color: #0f172a;
+        border-color: #1e293b;
+        border-left-color: #38bdf8;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
     html:not([dark="false"]) .fhp-modal-content,
     html:not([dark="false"]) .fhp-matrix-content {
-        background-color: #202124;
-        color: #e8eaed;
-        box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+        background-color: #0f172a;
+        color: #f8fafc;
+        border-color: #334155;
+        box-shadow: 0 20px 30px rgba(0,0,0,0.7);
     }
     html:not([dark="false"]) .fhp-modal-header,
     html:not([dark="false"]) .fhp-matrix-header {
-        border-bottom-color: #3c4043;
+        border-bottom-color: #334155;
+    }
+    html:not([dark="false"]) .fhp-modal-title,
+    html:not([dark="false"]) .fhp-matrix-title,
+    html:not([dark="false"]) .fhp-modal-total {
+        color: #f8fafc;
+    }
+    html:not([dark="false"]) .fhp-modal-total {
+        border-top-color: #38bdf8;
     }
     html:not([dark="false"]) .fhp-modal-subtext {
-        color: #9aa0a6;
+        color: #94a3b8;
     }
     html:not([dark="false"]) .fhp-matrix-scroll-body {
-        border-color: #3c4043;
-        background-color: #171717;
+        border-color: #334155;
+        background-color: #090d16;
     }
     html:not([dark="false"]) .fhp-matrix-table th {
-        background-color: #202124;
-        color: #bdc1c6;
-        border-bottom-color: #3c4043;
-        border-right-color: #3c4043;
+        background-color: #1e293b;
+        color: #cbd5e1;
+        border-bottom-color: #334155;
+        border-right-color: #334155;
     }
     html:not([dark="false"]) .fhp-matrix-table td:first-child {
-        background-color: #202124;
-        color: #bdc1c6;
-        border-right-color: #3c4043;
+        background-color: #1e293b;
+        color: #f8fafc;
+        border-right-color: #475569;
     }
     html:not([dark="false"]) .fhp-matrix-cell {
-        border-color: #3c4043;
+        border-color: #1e293b;
     }
-    html:not([dark="false"]) .fhp-success { background-color: rgba(19, 115, 51, 0.25); color: #81c995; border-color: #137333; }
-    html:not([dark="false"]) .fhp-info { background-color: rgba(26, 115, 232, 0.25); color: #8ab4f8; border-color: #1a73e8; }
-    html:not([dark="false"]) .fhp-warn { background-color: rgba(234, 134, 0, 0.25); color: #fdd663; border-color: #b06000; }
-    html:not([dark="false"]) .fhp-danger { background-color: rgba(217, 48, 37, 0.25); color: #f28b82; border-color: #c5221f; }
-    html:not([dark="false"]) .fhp-stopover-badge { background-color: rgba(123, 31, 162, 0.25); color: #d7aefb; border-color: #7b1fa2; }
-    html:not([dark="false"]) .fhp-hotel-badge { background-color: rgba(26, 115, 232, 0.25); color: #8ab4f8; border-color: #1a73e8; }
-    html:not([dark="false"]) .fhp-tour-badge { background-color: rgba(19, 115, 51, 0.25); color: #81c995; border-color: #137333; }
-    html:not([dark="false"]) .fhp-multicity-badge { background-color: rgba(234, 134, 0, 0.25); color: #fdd663; border-color: #b06000; }
+    html:not([dark="false"]) .fhp-success { background-color: rgba(22, 101, 52, 0.35); color: #86efac; border-color: #166534; }
+    html:not([dark="false"]) .fhp-info { background-color: rgba(30, 64, 175, 0.35); color: #93c5fd; border-color: #1e40af; }
+    html:not([dark="false"]) .fhp-warn { background-color: rgba(146, 64, 14, 0.35); color: #fde047; border-color: #92400e; }
+    html:not([dark="false"]) .fhp-danger { background-color: rgba(153, 27, 27, 0.35); color: #fca5a5; border-color: #991b1b; }
+    html:not([dark="false"]) .fhp-stopover-badge { background-color: rgba(107, 33, 168, 0.35); color: #d8b4fe; border-color: #6b21a8; }
+    html:not([dark="false"]) .fhp-hotel-badge { background-color: rgba(3, 105, 161, 0.35); color: #7dd3fc; border-color: #0369a1; }
+    html:not([dark="false"]) .fhp-tour-badge { background-color: rgba(21, 128, 61, 0.35); color: #86efac; border-color: #15803d; }
+    html:not([dark="false"]) .fhp-multicity-badge { background-color: rgba(194, 65, 12, 0.35); color: #fdba74; border-color: #c2410c; }
+    html:not([dark="false"]) .fhp-hub-badge { background-color: rgba(30, 41, 59, 0.8); color: #e2e8f0; border-color: #475569; }
+    html:not([dark="false"]) .fhp-matrix-export-btn,
+    html:not([dark="false"]) .fhp-matrix-btn {
+        background: #1e293b;
+        border-color: #475569;
+        color: #f8fafc;
+    }
 }
 
 html[dark="true"] .fhp-container,
 body[dark="true"] .fhp-container {
-    background-color: #202124;
-    border-top-color: #3c4043;
+    background-color: #0f172a;
+    border-color: #1e293b;
+    border-left-color: #38bdf8;
 }
 html[dark="true"] .fhp-modal-content,
 body[dark="true"] .fhp-modal-content,
 html[dark="true"] .fhp-matrix-content,
 body[dark="true"] .fhp-matrix-content {
-    background-color: #202124;
-    color: #e8eaed;
+    background-color: #0f172a;
+    color: #f8fafc;
+    border-color: #334155;
 }
 html[dark="true"] .fhp-modal-header,
 body[dark="true"] .fhp-modal-header,
 html[dark="true"] .fhp-matrix-header,
 body[dark="true"] .fhp-matrix-header {
-    border-bottom-color: #3c4043;
+    border-bottom-color: #334155;
+}
+html[dark="true"] .fhp-modal-title,
+body[dark="true"] .fhp-modal-title,
+html[dark="true"] .fhp-matrix-title,
+body[dark="true"] .fhp-matrix-title,
+html[dark="true"] .fhp-modal-total,
+body[dark="true"] .fhp-modal-total {
+    color: #f8fafc;
+}
+html[dark="true"] .fhp-modal-total,
+body[dark="true"] .fhp-modal-total {
+    border-top-color: #38bdf8;
 }
 html[dark="true"] .fhp-modal-subtext,
 body[dark="true"] .fhp-modal-subtext {
-    color: #9aa0a6;
+    color: #94a3b8;
 }
 html[dark="true"] .fhp-matrix-scroll-body,
 body[dark="true"] .fhp-matrix-scroll-body {
-    border-color: #3c4043;
-    background-color: #171717;
+    border-color: #334155;
+    background-color: #090d16;
 }
 html[dark="true"] .fhp-matrix-table th,
 body[dark="true"] .fhp-matrix-table th,
 html[dark="true"] .fhp-matrix-table td:first-child,
 body[dark="true"] .fhp-matrix-table td:first-child {
-    background-color: #202124;
-    color: #bdc1c6;
-    border-color: #3c4043;
+    background-color: #1e293b;
+    color: #cbd5e1;
+    border-color: #334155;
 }
 html[dark="true"] .fhp-matrix-cell,
 body[dark="true"] .fhp-matrix-cell {
-    border-color: #3c4043;
+    border-color: #1e293b;
 }
-html[dark="true"] .fhp-success, body[dark="true"] .fhp-success { background-color: rgba(19, 115, 51, 0.25); color: #81c995; border-color: #137333; }
-html[dark="true"] .fhp-info, body[dark="true"] .fhp-info { background-color: rgba(26, 115, 232, 0.25); color: #8ab4f8; border-color: #1a73e8; }
-html[dark="true"] .fhp-warn, body[dark="true"] .fhp-warn { background-color: rgba(234, 134, 0, 0.25); color: #fdd663; border-color: #b06000; }
-html[dark="true"] .fhp-danger, body[dark="true"] .fhp-danger { background-color: rgba(217, 48, 37, 0.25); color: #f28b82; border-color: #c5221f; }
-html[dark="true"] .fhp-stopover-badge, body[dark="true"] .fhp-stopover-badge { background-color: rgba(123, 31, 162, 0.25); color: #d7aefb; border-color: #7b1fa2; }
-html[dark="true"] .fhp-hotel-badge, body[dark="true"] .fhp-hotel-badge { background-color: rgba(26, 115, 232, 0.25); color: #8ab4f8; border-color: #1a73e8; }
-html[dark="true"] .fhp-tour-badge, body[dark="true"] .fhp-tour-badge { background-color: rgba(19, 115, 51, 0.25); color: #81c995; border-color: #137333; }
-html[dark="true"] .fhp-multicity-badge, body[dark="true"] .fhp-multicity-badge { background-color: rgba(234, 134, 0, 0.25); color: #fdd663; border-color: #b06000; }
+html[dark="true"] .fhp-success, body[dark="true"] .fhp-success { background-color: rgba(22, 101, 52, 0.35); color: #86efac; border-color: #166534; }
+html[dark="true"] .fhp-info, body[dark="true"] .fhp-info { background-color: rgba(30, 64, 175, 0.35); color: #93c5fd; border-color: #1e40af; }
+html[dark="true"] .fhp-warn, body[dark="true"] .fhp-warn { background-color: rgba(146, 64, 14, 0.35); color: #fde047; border-color: #92400e; }
+html[dark="true"] .fhp-danger, body[dark="true"] .fhp-danger { background-color: rgba(153, 27, 27, 0.35); color: #fca5a5; border-color: #991b1b; }
+html[dark="true"] .fhp-stopover-badge, body[dark="true"] .fhp-stopover-badge { background-color: rgba(107, 33, 168, 0.35); color: #d8b4fe; border-color: #6b21a8; }
+html[dark="true"] .fhp-hotel-badge, body[dark="true"] .fhp-hotel-badge { background-color: rgba(3, 105, 161, 0.35); color: #7dd3fc; border-color: #0369a1; }
+html[dark="true"] .fhp-tour-badge, body[dark="true"] .fhp-tour-badge { background-color: rgba(21, 128, 61, 0.35); color: #86efac; border-color: #15803d; }
+html[dark="true"] .fhp-multicity-badge, body[dark="true"] .fhp-multicity-badge { background-color: rgba(194, 65, 12, 0.35); color: #fdba74; border-color: #c2410c; }
+html[dark="true"] .fhp-hub-badge, body[dark="true"] .fhp-hub-badge { background-color: rgba(30, 41, 59, 0.8); color: #e2e8f0; border-color: #475569; }

@@ -133,7 +133,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (input) input.addEventListener('change', saveSettings);
     });
 
+    // Top direct launcher
+    const topOpenGfBtn = document.getElementById('openGoogleFlightsTopBtn');
+    if (topOpenGfBtn) {
+        topOpenGfBtn.addEventListener('click', () => {
+            chrome.tabs.create({ url: 'https://www.google.com/travel/flights' });
+        });
+    }
+
     const arbLink = document.getElementById('arbLink');
+    if (arbLink) {
+        arbLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetUrl = arbLink.dataset.targetUrl;
+            if (targetUrl && (targetUrl.startsWith('http://') || targetUrl.startsWith('https://'))) {
+                chrome.tabs.create({ url: targetUrl });
+            }
+        });
+    }
+
+    const isGoogleFlightsTab = (tab) => {
+        return Boolean(tab && tab.url && (tab.url.includes('google.com/travel/flights') || (tab.url.includes('google.') && tab.url.includes('/flights'))));
+    };
 
     arbitrageBtn.addEventListener('click', () => {
         statusText.style.color = "#1a73e8";
@@ -142,48 +163,57 @@ document.addEventListener('DOMContentLoaded', () => {
         if (arbLink) arbLink.style.display = "none";
         
         chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-            if (tabs[0]) {
-                chrome.tabs.sendMessage(tabs[0].id, { action: 'getRoutePayload' }, (payload) => {
-                    if (chrome.runtime.lastError || !payload) {
-                        arbitrageBtn.disabled = false;
-                        statusText.style.color = "#c5221f";
-                        statusText.innerText = "Error: Open a Google Flights page first.";
-                        return;
-                    }
-                    if (!payload.basePriceUSD || payload.basePriceUSD <= 0) {
-                        arbitrageBtn.disabled = false;
-                        statusText.style.color = "#c5221f";
-                        statusText.innerText = "Error: No active flight fare detected on current page.";
-                        return;
-                    }
-                    const activeUrl = tabs[0].url || payload.url || 'https://www.google.com/travel/flights';
-                    chrome.runtime.sendMessage({
-                        action: 'checkPOS',
-                        url: activeUrl,
-                        flightPayload: payload
-                    }, (response) => {
-                        arbitrageBtn.disabled = false;
-                        if (response && response.success && response.arbitrage) {
-                            statusText.style.color = "#1e8e3e";
-                            statusText.innerText = `Simulated Regional Estimate: ~${response.arbitrage.savingsPct}% off in ${response.arbitrage.currency}`;
-                            if (arbLink) {
-                                const userBaseCurr = inputs.baseCurrency.value || 'INR';
-                                const currencySymbols = { 'INR': '₹', 'USD': '$', 'EUR': '€', 'GBP': '£', 'AED': 'AED ', 'AUD': 'A$', 'CAD': 'C$', 'SGD': 'S$' };
-                                const sym = currencySymbols[userBaseCurr] || (userBaseCurr + ' ');
-                                arbLink.href = response.arbitrage.url;
-                                arbLink.innerText = `👉 Open ${response.arbitrage.currency} Search (Est. Save ~${sym}${Math.round(response.arbitrage.savings).toLocaleString()})`;
-                                arbLink.style.display = "block";
-                            }
-                        } else {
-                            statusText.style.color = "#5f6368";
-                            statusText.innerText = response?.reason || "Scan complete. No significant regional differential estimated.";
-                        }
-                    });
-                });
-            } else {
+            const activeTab = tabs && tabs[0];
+            if (!activeTab || !isGoogleFlightsTab(activeTab)) {
                 arbitrageBtn.disabled = false;
-                statusText.innerText = "Error: Open Google Flights tab first.";
+                statusText.style.color = "#1a73e8";
+                statusText.innerHTML = `⚠️ Active tab is not Google Flights.<br><button id="arbOpenGfTabBtn" style="margin-top:6px; padding:6px 12px; background:#1a73e8; color:#fff; border:none; border-radius:12px; cursor:pointer; font-weight:bold; font-size:11px;">🚀 Open Google Flights</button>`;
+                const directOpenBtn = document.getElementById('arbOpenGfTabBtn');
+                if (directOpenBtn) {
+                    directOpenBtn.addEventListener('click', () => {
+                        chrome.tabs.create({ url: 'https://www.google.com/travel/flights' });
+                    });
+                }
+                return;
             }
+
+            chrome.tabs.sendMessage(activeTab.id, { action: 'getRoutePayload' }, (payload) => {
+                if (chrome.runtime.lastError || !payload) {
+                    arbitrageBtn.disabled = false;
+                    statusText.style.color = "#c5221f";
+                    statusText.innerText = "Error: Could not read route. Please refresh the Google Flights tab.";
+                    return;
+                }
+                if (!payload.basePriceUSD || payload.basePriceUSD <= 0) {
+                    arbitrageBtn.disabled = false;
+                    statusText.style.color = "#c5221f";
+                    statusText.innerText = "Error: No active flight fare detected on current page.";
+                    return;
+                }
+                const activeUrl = activeTab.url || payload.url || 'https://www.google.com/travel/flights';
+                chrome.runtime.sendMessage({
+                    action: 'checkPOS',
+                    url: activeUrl,
+                    flightPayload: payload
+                }, (response) => {
+                    arbitrageBtn.disabled = false;
+                    if (response && response.success && response.arbitrage) {
+                        statusText.style.color = "#1e8e3e";
+                        statusText.innerText = `Simulated Regional Estimate: ~${response.arbitrage.savingsPct}% off in ${response.arbitrage.currency}`;
+                        if (arbLink) {
+                            const userBaseCurr = inputs.baseCurrency.value || 'INR';
+                            const currencySymbols = { 'INR': '₹', 'USD': '$', 'EUR': '€', 'GBP': '£', 'AED': 'AED ', 'AUD': 'A$', 'CAD': 'C$', 'SGD': 'S$' };
+                            const sym = currencySymbols[userBaseCurr] || (userBaseCurr + ' ');
+                            arbLink.dataset.targetUrl = response.arbitrage.url;
+                            arbLink.innerText = `👉 Open ${response.arbitrage.currency} Search (Est. Save ~${sym}${Math.round(response.arbitrage.savings).toLocaleString()})`;
+                            arbLink.style.display = "block";
+                        }
+                    } else {
+                        statusText.style.color = "#5f6368";
+                        statusText.innerText = response?.reason || response?.message || "Scan complete. No significant regional differential estimated.";
+                    }
+                });
+            });
         });
     });
 
@@ -196,27 +226,38 @@ document.addEventListener('DOMContentLoaded', () => {
             statusText.style.color = "#137333";
             statusText.innerText = `Generating ${horizon}-Day Fare Matrix...`;
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                if (tabs[0]) {
-                    chrome.tabs.sendMessage(tabs[0].id, {
-                        action: 'startMatrixScan',
-                        scanHorizon: horizon,
-                        tripBracket: bracket,
-                        viewMode: 'DAYWISE'
-                    }, (res) => {
-                        if (chrome.runtime.lastError) {
-                            statusText.style.color = "#c5221f";
-                            statusText.innerText = "Error: Open a Google Flights page first.";
-                            return;
-                        }
-                        if (res && res.success) {
-                            statusText.style.color = "#137333";
-                            statusText.innerText = `${horizon}-Day Matrix Heat-Map Rendered!`;
-                        } else {
-                            statusText.style.color = "#c5221f";
-                            statusText.innerText = res?.reason || "Could not generate matrix. Ensure route is visible.";
-                        }
-                    });
+                const activeTab = tabs && tabs[0];
+                if (!activeTab || !isGoogleFlightsTab(activeTab)) {
+                    statusText.style.color = "#137333";
+                    statusText.innerHTML = `⚠️ Open Google Flights to view Matrix.<br><button id="matrixOpenGfTabBtn" style="margin-top:6px; padding:6px 12px; background:#137333; color:#fff; border:none; border-radius:12px; cursor:pointer; font-weight:bold; font-size:11px;">🚀 Open Google Flights</button>`;
+                    const directOpenBtn = document.getElementById('matrixOpenGfTabBtn');
+                    if (directOpenBtn) {
+                        directOpenBtn.addEventListener('click', () => {
+                            chrome.tabs.create({ url: 'https://www.google.com/travel/flights' });
+                        });
+                    }
+                    return;
                 }
+
+                chrome.tabs.sendMessage(activeTab.id, {
+                    action: 'startMatrixScan',
+                    scanHorizon: horizon,
+                    tripBracket: bracket,
+                    viewMode: 'DAYWISE'
+                }, (res) => {
+                    if (chrome.runtime.lastError) {
+                        statusText.style.color = "#c5221f";
+                        statusText.innerText = "Error: Please refresh your Google Flights page to inject the scanner.";
+                        return;
+                    }
+                    if (res && res.success) {
+                        statusText.style.color = "#137333";
+                        statusText.innerText = `${horizon}-Day Matrix Heat-Map Rendered!`;
+                    } else {
+                        statusText.style.color = "#c5221f";
+                        statusText.innerText = res?.reason || "Could not generate matrix. Ensure route is visible.";
+                    }
+                });
             });
         });
     }
@@ -226,17 +267,23 @@ document.addEventListener('DOMContentLoaded', () => {
         clearCacheBtn.addEventListener('click', () => {
             statusText.style.color = "#1a73e8";
             statusText.innerText = "Purging cache & auto-tuning fares...";
-            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                if (tabs[0]) {
-                    chrome.tabs.sendMessage(tabs[0].id, { action: 'clearCacheAndAutoTune' }, (res) => {
-                        if (chrome.runtime.lastError) {
-                            statusText.style.color = "#c5221f";
-                            statusText.innerText = "Error: Open a Google Flights page first.";
-                            return;
+            
+            // Purge stored route anchors & fare caches directly in local storage
+            chrome.storage.local.get(null, (allStorage) => {
+                const keysToRemove = Object.keys(allStorage).filter(k => k.startsWith('fhp_fare_') || k.startsWith('fhp_anchor_'));
+                chrome.storage.local.remove(keysToRemove, () => {
+                    // Also notify Google Flights if active
+                    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                        const activeTab = tabs && tabs[0];
+                        if (activeTab && isGoogleFlightsTab(activeTab)) {
+                            chrome.tabs.sendMessage(activeTab.id, { action: 'clearCacheAndAutoTune' }, () => {
+                                void chrome.runtime.lastError;
+                            });
                         }
-                        statusText.innerText = `🧹 Cache Purged & Auto-Tuned! (${res?.clearedCount || 0} entries cleared)`;
                     });
-                }
+                    statusText.style.color = "#1a73e8";
+                    statusText.innerText = `🧹 Cache Purged & Auto-Tuned! (${keysToRemove.length} entries removed)`;
+                });
             });
         });
     }
