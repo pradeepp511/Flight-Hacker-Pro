@@ -1757,9 +1757,9 @@ function generateMatrixData(routeInfo, scanHorizon = 30, tripBracket = '5-21', c
             const isActiveSearchCell = Boolean(routeInfo.activeDepISO && depDateISO === routeInfo.activeDepISO);
             const cacheKey = `fhp_fare_${routeInfo.origin}_${routeInfo.destination}_${depDateISO}_oneway_p${pax}`;
             const cachedEntry = storageCache ? storageCache[cacheKey] : null;
-            let fareBase;
-            let fareUSD;
-            let provenance = 'MODELLED_ESTIMATE';
+            let fareBase = null;
+            let fareUSD = null;
+            let provenance = 'NO_PRICE';
 
             if (isActiveSearchCell && routeInfo.liveLowestFare && routeInfo.liveLowestFare > 0) {
                 fareBase = routeInfo.liveLowestFare;
@@ -1787,15 +1787,15 @@ function generateMatrixData(routeInfo, scanHorizon = 30, tripBracket = '5-21', c
                 fareUSD = fareBase / (exchangeRates[routeInfo.userCurr] || 1.0);
                 provenance = 'CACHED_OBSERVATION';
             } else {
-                provenance = 'MODELLED_ESTIMATE';
-                const finalMultiplier = calculateRealisticFareMultiplier(depDate, null, startDate);
-
-                fareUSD = routeAnchorUSD * finalMultiplier;
-                fareBase = Math.round(fareUSD * (exchangeRates[routeInfo.userCurr] || 1.0));
+                provenance = 'NO_PRICE';
+                fareUSD = null;
+                fareBase = null;
             }
 
-            allPrices.push(fareBase);
-            sumPrices += fareBase;
+            if (fareBase && fareBase > 0) {
+                allPrices.push(fareBase);
+                sumPrices += fareBase;
+            }
 
             const daysOut = Math.max(1, Math.round((depDate - startDate) / (1000 * 60 * 60 * 24)));
             let leadTimeCategory = 'DOMESTIC_SWEET_SPOT';
@@ -1878,15 +1878,12 @@ function generateMatrixData(routeInfo, scanHorizon = 30, tripBracket = '5-21', c
         const highThreshold = allPrices[Math.floor(allPrices.length * 0.85)] || avgPrice;
 
         let verifiedBestCell = null;
-        let estimateBestCell = null;
         allCells.forEach(cell => {
-            if (cell.provenance === 'OBSERVED_LIVE' || cell.provenance === 'CACHED_OBSERVATION') {
+            if ((cell.provenance === 'OBSERVED_LIVE' || cell.provenance === 'CACHED_OBSERVATION') && cell.fareBase && cell.fareBase > 0) {
                 if (!verifiedBestCell || cell.fareBase < verifiedBestCell.fareBase) verifiedBestCell = cell;
-            } else {
-                if (!estimateBestCell || cell.fareBase < estimateBestCell.fareBase) estimateBestCell = cell;
             }
         });
-        const chosenBestCell = verifiedBestCell || estimateBestCell || bestCell;
+        const chosenBestCell = verifiedBestCell;
 
         const savingsBase = chosenBestCell ? Math.max(0, avgPrice - chosenBestCell.fareBase) : 0;
         const savingsPct = (avgPrice > 0 && chosenBestCell) ? ((savingsBase / avgPrice) * 100).toFixed(1) : '0';
@@ -1994,9 +1991,9 @@ function generateMatrixData(routeInfo, scanHorizon = 30, tripBracket = '5-21', c
                 ? `fhp_fare_mc_${routeInfo.origin}_${routeInfo.destination}_${depDateISO}_${retDateISO}_p${pax}`
                 : `fhp_fare_${routeInfo.origin}_${routeInfo.destination}_${depDateISO}_${retDateISO}_p${pax}`;
             const cachedEntry = storageCache ? storageCache[cacheKey] : null;
-            let fareBase;
-            let fareUSD;
-            let provenance = 'MODELLED_ESTIMATE';
+            let fareBase = null;
+            let fareUSD = null;
+            let provenance = 'NO_PRICE';
 
             if (isActiveSearchCell && routeInfo.liveLowestFare && routeInfo.liveLowestFare > 0) {
                 fareBase = routeInfo.liveLowestFare;
@@ -2025,15 +2022,18 @@ function generateMatrixData(routeInfo, scanHorizon = 30, tripBracket = '5-21', c
                 fareUSD = fareBase / (exchangeRates[routeInfo.userCurr] || 1.0);
                 provenance = 'CACHED_OBSERVATION';
             } else {
-                provenance = 'MODELLED_ESTIMATE';
-                const finalMultiplier = calculateRealisticFareMultiplier(depDate, retDate, startDate);
-
-                fareUSD = routeAnchorUSD * finalMultiplier;
-                fareBase = Math.round(fareUSD * (exchangeRates[routeInfo.userCurr] || 1.0));
+                provenance = 'NO_PRICE';
+                fareUSD = null;
+                fareBase = null;
             }
 
-            allPrices.push(fareBase);
-            sumPrices += fareBase;
+            if (fareBase && fareBase > 0) {
+                allPrices.push(fareBase);
+                sumPrices += fareBase;
+                if (!bestCell || fareBase < bestCell.fareBase) {
+                    bestCell = cellObj;
+                }
+            }
 
             const daysOut = Math.max(1, Math.round((depDate - startDate) / (1000 * 60 * 60 * 24)));
             let leadTimeCategory = 'DOMESTIC_SWEET_SPOT';
@@ -2098,15 +2098,12 @@ function generateMatrixData(routeInfo, scanHorizon = 30, tripBracket = '5-21', c
 
     // Select smart best deal: Prioritize verified live or cached quotes first
     let verifiedBestCell = null;
-    let estimateBestCell = null;
     allCells.forEach(cell => {
-        if (cell.provenance === 'OBSERVED_LIVE' || cell.provenance === 'CACHED_OBSERVATION') {
+        if ((cell.provenance === 'OBSERVED_LIVE' || cell.provenance === 'CACHED_OBSERVATION') && cell.fareBase && cell.fareBase > 0) {
             if (!verifiedBestCell || cell.fareBase < verifiedBestCell.fareBase) verifiedBestCell = cell;
-        } else {
-            if (!estimateBestCell || cell.fareBase < estimateBestCell.fareBase) estimateBestCell = cell;
         }
     });
-    const chosenBestCell = verifiedBestCell || estimateBestCell || bestCell;
+    const chosenBestCell = verifiedBestCell;
 
     const savingsBase = chosenBestCell ? Math.max(0, avgPrice - chosenBestCell.fareBase) : 0;
     const savingsPct = (avgPrice > 0 && chosenBestCell) ? ((savingsBase / avgPrice) * 100).toFixed(1) : '0';
@@ -2235,22 +2232,28 @@ function exportMatrixToCSV(matrixData, routeInfo) {
     csv += `Total Combinations Checked: ${matrixData.totalScanned}\n`;
     csv += `Export Timestamp: ${new Date().toISOString()}\n\n`;
 
+    const formatCsvCell = (c, extra = '') => {
+        if (!c) return '""';
+        if (!c.fareBase || c.provenance === 'NO_PRICE') return `"No Price${extra ? ` (${extra})` : ''}"`;
+        return `"${formatMoney(c.fareBase, routeInfo.userCurr)} [${c.provenance}]${extra ? ` (${extra})` : ''}"`;
+    };
+
     if (isOneWay) {
         csv += `Week,${(matrixData.columns || ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']).join(',')}\n`;
         matrixData.rows.forEach(row => {
-            const line = [`"${row.label || row.depDateStr}"`, ...row.cells.map(c => c ? `"${c.depDateStr}: ${formatMoney(c.fareBase, routeInfo.userCurr)} [${c.provenance || 'MODELLED_ESTIMATE'}]"` : '""')].join(',');
+            const line = [`"${row.label || row.depDateStr}"`, ...row.cells.map(c => c ? (c.fareBase ? `"${c.depDateStr}: ${formatMoney(c.fareBase, routeInfo.userCurr)} [${c.provenance}]"` : `"${c.depDateStr}: No Price"`) : '""')].join(',');
             csv += line + '\n';
         });
     } else if (isMultiCity) {
         csv += `Leg 1 Departure Date,${matrixData.tripLengths.map(l => `${l}d Gap (Leg 2)`).join(',')}\n`;
         matrixData.rows.forEach(row => {
-            const line = [`"${row.depFullStr}"`, ...row.cells.map(c => `"${formatMoney(c.fareBase, routeInfo.userCurr)} [${c.provenance || 'MODELLED_ESTIMATE'}] (Leg 2: ${c.retFullStr})"` )].join(',');
+            const line = [`"${row.depFullStr}"`, ...row.cells.map(c => formatCsvCell(c, `Leg 2: ${c.retFullStr}`))].join(',');
             csv += line + '\n';
         });
     } else {
         csv += `Departure Date,${matrixData.tripLengths.map(l => `${l} Days Return`).join(',')}\n`;
         matrixData.rows.forEach(row => {
-            const line = [`"${row.depFullStr}"`, ...row.cells.map(c => `"${formatMoney(c.fareBase, routeInfo.userCurr)} [${c.provenance || 'MODELLED_ESTIMATE'}] (Ret: ${c.retFullStr})"` )].join(',');
+            const line = [`"${row.depFullStr}"`, ...row.cells.map(c => formatCsvCell(c, `Ret: ${c.retFullStr}`))].join(',');
             csv += line + '\n';
         });
     }
@@ -2326,7 +2329,7 @@ function getProvenanceBadgeHtml(prov) {
     } else if (prov === 'CACHED_OBSERVATION') {
         return `<span class="fhp-cell-tag fhp-tag-cached" title="Recent verified fare observation">Cached</span>`;
     } else {
-        return `<span class="fhp-cell-tag fhp-tag-est" title="Calibrated dynamic pricing estimate">Est.</span>`;
+        return `<span class="fhp-cell-tag" style="background:#f1f5f9; color:#94a3b8; border:1px solid #cbd5e1; font-size:9px; padding:1px 4px; border-radius:3px;" title="No price found for this date">No Price</span>`;
     }
 }
 
@@ -2346,6 +2349,41 @@ function renderMatrixCellsHtml(rows, deal, matrixData, userCurr) {
                 html += `<td style="background:#f8fafc; border:1px solid #e2e8f0; opacity:0.35;"></td>`;
                 return;
             }
+
+            const subLabelHtml = isOneWay 
+                ? `<strong>${cell.depDateStr}</strong>` 
+                : (isMultiCity 
+                    ? `Leg 2: ${cell.retDayOfWeek}, ${cell.retDateStr}` 
+                    : `Ret: ${cell.retDayOfWeek}, ${cell.retDateStr}`);
+
+            if (cell.provenance === 'NO_PRICE' || !cell.fareBase) {
+                html += `
+                    <td class="fhp-matrix-cell" 
+                        role="button"
+                        tabindex="0"
+                        aria-label="No price found for ${cell.depFullStr}"
+                        data-dep-iso="${cell.depDateISO}"
+                        data-ret-iso="${cell.retDateISO || ''}"
+                        data-len="${cell.len}"
+                        data-dep-str="${cell.depFullStr}"
+                        data-ret-str="${cell.retFullStr || 'One-Way'}"
+                        data-fare-base=""
+                        data-provenance="NO_PRICE"
+                        style="background:#f8fafc; border:1px solid #e2e8f0; cursor:pointer;"
+                        title="No price found for ${cell.depFullStr} (Click to check on Google Flights)">
+                        <div style="line-height:1.25;">
+                            <div class="fhp-cell-price" style="color:#94a3b8; font-weight:500;">
+                                — <span class="fhp-cell-tag" style="background:#f1f5f9; color:#94a3b8; border:1px solid #cbd5e1; font-size:9px; padding:1px 4px; border-radius:3px;">No Price</span>
+                            </div>
+                            <div style="font-size:10px; color:#64748b; margin-top:3px; font-weight:500;">
+                                ${subLabelHtml}
+                            </div>
+                        </div>
+                    </td>
+                `;
+                return;
+            }
+
             let colorClass = 'fhp-matrix-cell-yellow';
             const isBest = deal ? (cell.fareBase === deal.fareBase && cell.depDateISO === deal.depDateISO && (isOneWay || cell.retDateISO === deal.retDateISO)) : false;
 
@@ -2358,7 +2396,7 @@ function renderMatrixCellsHtml(rows, deal, matrixData, userCurr) {
             }
 
             const statusBadge = getProvenanceBadgeHtml(cell.provenance);
-            const provDesc = (cell.provenance === 'OBSERVED_LIVE') ? 'Verified Live Quote' : ((cell.provenance === 'CACHED_OBSERVATION') ? 'Cached Fare' : 'Dynamic Fare Model');
+            const provDesc = (cell.provenance === 'OBSERVED_LIVE') ? 'Verified Live Quote' : 'Cached Fare';
             const tooltipText = isOneWay
                 ? `${isBest ? 'OPTIMAL FARE RECOMMENDATION: ' : ''}${provDesc} | Dep: ${cell.depFullStr} (One-Way) | ${cell.leadTimeBadge || ''} | Base Fare: ${formatMoney(cell.fareBase, userCurr)}`
                 : (isMultiCity
@@ -2371,12 +2409,6 @@ function renderMatrixCellsHtml(rows, deal, matrixData, userCurr) {
                     ? `Leg 1 Departure ${cell.depFullStr}, Leg 2 Departure ${cell.retFullStr}, ${cell.len} days itinerary, Fare ${formatMoney(cell.fareBase, userCurr)}`
                     : `Departure ${cell.depFullStr}, Return ${cell.retFullStr}, ${cell.len} days, Fare ${formatMoney(cell.fareBase, userCurr)}`);
 
-            const subLabelHtml = isOneWay 
-                ? `<strong>${cell.depDateStr}</strong>` 
-                : (isMultiCity 
-                    ? `Leg 2: ${cell.retDayOfWeek}, ${cell.retDateStr}` 
-                    : `Ret: ${cell.retDayOfWeek}, ${cell.retDateStr}`);
-
             html += `
                 <td class="fhp-matrix-cell ${colorClass}" 
                     role="button"
@@ -2388,7 +2420,7 @@ function renderMatrixCellsHtml(rows, deal, matrixData, userCurr) {
                     data-dep-str="${cell.depFullStr}"
                     data-ret-str="${cell.retFullStr || 'One-Way'}"
                     data-fare-base="${cell.fareBase}"
-                    data-provenance="${cell.provenance || 'MODELLED_ESTIMATE'}"
+                    data-provenance="${cell.provenance}"
                     title="${tooltipText}">
                     <div style="line-height:1.25;">
                         <div class="fhp-cell-price">${formatMoney(cell.fareBase, userCurr)}${statusBadge}</div>
@@ -2992,7 +3024,7 @@ function showMatrixHeatMapModal(matrixData, routeInfo, initOutDay = 'ANY', initR
             const retIso = cellEl.dataset.retIso;
             const fareBase = parseInt(cellEl.dataset.fareBase, 10);
             const cellLen = parseInt(cellEl.dataset.len || '0', 10);
-            const prov = cellEl.dataset.provenance || 'MODELLED_ESTIMATE';
+            const prov = cellEl.dataset.provenance || 'NO_PRICE';
 
             const inDurationRange = cellLen >= minVal && cellLen <= maxVal;
             if (!currentMatrixData.isOneWay && !inDurationRange && viewModeSelect && viewModeSelect.value === 'FIXED') {
@@ -3004,8 +3036,12 @@ function showMatrixHeatMapModal(matrixData, routeInfo, initOutDay = 'ANY', initR
             const isMatch = filteredDeal && (depIso === filteredDeal.depDateISO && (currentMatrixData.isOneWay || retIso === (filteredDeal.retDateISO || '')) && fareBase === filteredDeal.fareBase && (currentMatrixData.isOneWay || cellLen === filteredDeal.len));
             const priceText = cellEl.querySelector('.fhp-cell-price');
             if (priceText) {
-                const statusBadge = getProvenanceBadgeHtml(prov);
-                priceText.innerHTML = `${isMatch ? '🏆 ' : ''}${formatMoney(fareBase, userCurr)}${statusBadge}`;
+                if (prov === 'NO_PRICE' || !fareBase || isNaN(fareBase)) {
+                    priceText.innerHTML = `— <span class="fhp-cell-tag" style="background:#f1f5f9; color:#94a3b8; border:1px solid #cbd5e1; font-size:9px; padding:1px 4px; border-radius:3px;">No Price</span>`;
+                } else {
+                    const statusBadge = getProvenanceBadgeHtml(prov);
+                    priceText.innerHTML = `${isMatch ? '🏆 ' : ''}${formatMoney(fareBase, userCurr)}${statusBadge}`;
+                }
             }
             if (isMatch) {
                 cellEl.classList.add('fhp-matrix-cell-best');
